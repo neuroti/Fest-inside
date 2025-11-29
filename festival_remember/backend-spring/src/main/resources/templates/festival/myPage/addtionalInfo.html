@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+  <title th:fragment="title">추가정보 입력</title>
+  <th:block th:fragment="content">
+
+    <body>
+    <div class="container mt-5">
+      <h1>추가정보 입력</h1>
+      <form id="additionalInfoForm" method="post">
+        <div class="mb-3">
+          <label for="birthDate" class="form-label">생년월일</label>
+          <input type="date" id="birthDate" name="birthDate" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="phoneNumber" class="form-label">휴대폰 번호</label>
+          <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="010-1234-5678" required>
+        </div>
+        <div class="mb-3">
+          <label for="mbti" class="form-label">MBTI</label>
+          <input type="text" id="mbti" name="mbti" class="form-control" placeholder="예: ENFJ" maxlength="4" required>
+        </div>
+        <button type="submit" class="btn btn-primary">추가정보 저장</button>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById('additionalInfoForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = {
+          birthDate: document.getElementById('birthDate').value,
+          phoneNumber: document.getElementById('phoneNumber').value,
+          mbti: document.getElementById('mbti').value
+        };
+
+        try {
+          const response = await fetch('/festival/myPage/addtionalInfo', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+
+          if (response.ok) {
+            window.location.href = '/festival/myPage/myInfo';
+          } else {
+            alert('추가정보 저장 중 오류가 발생했습니다.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('네트워크 오류가 발생했습니다.');
+        }
+      });
+    </script>
+    </body>
+
+  </th:block>
+</th:block>

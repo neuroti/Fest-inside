@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+    <th:block th:fragment="content">
+
+        <head>
+            <title th:fragment="title">로그인</title>
+
+            <link rel="stylesheet" th:href="@{/css/layoutStyle/fs1.css}">
+            <script src="https://kit.fontawesome.com/2ae8fd07db.js" crossorigin="anonymous"></script>
+        </head>
+
+        <body>
+        <div class="fs1-container">
+            <form th:action="@{/festival/login}" th:method="post" class="loginForm">
+
+                <div class="h1">LOGIN</div>
+                <form>
+                    <div class="input-group">
+                        <input type="email" id="email" name="username" class="form-control" th:value="${loginDTO.email}" placeholder="email" autocomplete="username">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="password" autocomplete="current-password">
+                    </div>
+
+
+                    <div class="checkbox-container">
+
+                        <input type="checkbox" id="remember-id">
+                        <label for="remember-id" class="label">아이디 저장</label>
+                    </div>
+
+                    <button th:type="submit" class="button-style" th:href="@{/festival/home}">welcome</button>
+
+                    <div class="social-buttons">
+                        <a th:href="@{/oauth2/authorization/kakao}" class="social-button">
+                            <img th:src="@{/images/social-Icon/kakaoicon.jpg}" alt="Kakao 로그인"></a>
+
+                        <a th:href="@{/oauth2/authorization/naver}" class="social-button">
+                            <img th:src="@{/images/social-Icon/navericon.jpg}"></a>
+
+                        <a th:href="@{/oauth2/authorization/google}" class="social-button">
+                            <img th:src="@{/images/social-Icon/googleicon.jpg}"></a>
+                        <!--<i class="fa-brands fa-google"></i></a>-->
+                    </div>
+                </form>
+                <div th:if="${error}" class="alert alert-warning mt-3 font Times">
+                    <strong th:text="${loginDTO.errorMessage}">Warning!</strong>
+                </div>
+
+                <form class="link-container">
+                    <a class="link-container a" th:href="@{/festival/myPage/findId}">FIND ID</a> | <a class="link-container a" href="@{/festival/myPage/findPwd}">FIND PW</a> |  <a class="link-container a" th:href="@{/festival/step1}">SING UP</a>
+                </form>
+            </form>
+        </div>
+        </body>
+    </th:block>
+</th:block>
+</html>

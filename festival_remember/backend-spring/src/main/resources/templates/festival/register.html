@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+    <th:block th:fragment="content">
+
+    <head>
+        <title th:fragment="title">회원가입</title>
+        <script src="https://kit.fontawesome.com/2ae8fd07db.js" crossorigin="anonymous"></script>
+
+
+        <link rel="stylesheet" th:href="@{/css/festival/register.css}">
+
+    </head>
+
+        <body>
+        <div class="signup-container">
+            <div class="signup-title">SIGN UP</div>
+
+            <form th:action="@{/festival/register}" th:method="post" th:object="${member}">
+                <!-- 이메일 입력 -->
+                <div class="signup-input-group required">
+                    <input type="email" id="email" name="email" th:value="${member.email}" placeholder="Email" required readonly />
+                </div>
+
+                <!-- 이름 입력 -->
+                <div class="signup-input-group required">
+                    <input type="text" id="name" name="name" placeholder="Name" required />
+                </div>
+
+                <!-- 비밀번호 입력 -->
+                <div class="signup-input-group required">
+                    <input type="password" id="password" name="password" placeholder="Password" required />
+                </div>
+
+                <!-- 생년월일 입력 -->
+                <div class="signup-input-group">
+                    <input type="date" id="birthDate" name="birthDate" />
+                </div>
+
+                <!-- 전화번호 입력 -->
+                <div class="signup-input-group">
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" />
+                </div>
+
+                <!-- MBTI 선택 -->
+                <div class="signup-input-group">
+                    <select id="mbti" name="mbti">
+                        <option value="" disabled selected>MBTI를 선택하세요</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ENTJ">ENTJ</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INFP">INFP</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESFP">ESFP</option>
+                    </select>
+                    <label class="required-message">* 필수 입력란 입니다.</label>
+                </div>
+
+                <!-- 회원가입 버튼 -->
+                <button type="submit" class="signup-button">회원가입</button>
+            </form>
+        </div>
+        </body>
+    </th:block>
+</th:block>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+    <title th:fragment="title">북마크</title>
+    <th:block th:fragment="content">
+        <style>
+            /* 전체 배경 및 텍스트 */
+            @font-face {
+                 font-family: 'S-CoreDream-3Light';
+                 src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+                 font-weight: normal;
+                 font-style: normal;
+            }
+            body {
+                font-family: 'S-CoreDream-3Light';
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .bookmark-container {
+                max-width: 1200px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #F7F8FF; /* 배경 */
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+            }
+            h2 {
+                text-align: center;
+                font-weight: 900;
+                color: #09214E;
+                margin-bottom: 30px;
+            }
+            .comments {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* 3열 */
+                gap: 20px; /* 아이템 간 간격 */
+                justify-items: stretch; /* 각 카드가 열을 가득 채우도록 설정 */
+                align-items: stretch; /* 카드 높이를 동일하게 맞추기 */
+            }
+            /* 링크 스타일 */
+            .comment-card {
+                display: flex;
+                flex-direction: column; /* 수직 정렬 */
+                text-decoration: none;
+                border: 2px solid #09214E; /* 테두리 */
+                border-radius: 8px;
+                padding: 10px;
+                background-color: #F7F8FF;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                box-sizing: border-box; /* padding을 포함한 크기 계산 */
+                margin-bottom: 15px;
+                height: 100%; /* 카드 높이를 100%로 설정하여 동일한 높이를 유지 */
+            }
+            .comment-card h4 {
+                margin: 10px 0 5px 5px;
+                color: #09214E;
+                font-weight: 700;
+                font-size: 1.3rem;
+            }
+            /* 북마크 정보 */
+            .comment {
+                margin: 0 15px 0 15px;
+            }
+            .comment p {
+                margin: 5px 0;
+                color: #09214E;
+                font-size: 16px;
+            }
+            .bookmark-title {
+                display: flex; /* 수평 배치 */
+                justify-content: space-between; /* 양 끝에 배치 */
+                align-items: center; /* 수직 가운데 정렬 */
+            }
+            /* 이미지 스타일 */
+            .festival-image {
+                width: 100%; /* 이미지의 가로 크기를 카드의 전체 너비에 맞게 설정 */
+                height: 200px; /* 높이는 자동으로 비율에 맞춰 설정 */
+                border-radius: 8px; /* 이미지 모서리를 둥글게 설정 */
+                object-fit: cover; /* 이미지가 영역을 완전히 채우도록 설정 (비율 유지) */
+                margin: 5px 0 10px 0;
+            }
+            /* 북마크 하트 스타일 */
+            .bookmark-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                display: flex;
+                flex-direction: column; /* 세로 정렬 */
+                justify-content: flex-start; /* 위쪽 정렬 */
+            }
+            .bookmark-btn .bookmark-icon {
+                position: relative;
+                display: inline-block;
+                font-size: 28px; /* 하트 크기 */
+                color: #09214E; /* 기본 색 */
+                transform: scale(1);
+                transition: transform 0.3s ease, color 0.3s ease, filter 0.2s ease;
+            }
+            /* 활성화된 하트 스타일 */
+            .bookmark-btn .bookmark-icon.active {
+                color: #6B8BF5; /* 활성화 */
+                transform: scale(1.2); /* 확대 효과 */
+                filter: brightness(1.2); /* 밝기 증가 */
+            }
+            /* 하트 버튼 호버 효과 */
+            .bookmark-btn:hover .bookmark-icon {
+                color: #6B8BF5; /* 호버 시 색 */
+            }
+
+            /* 화면 크기가 1024px 이하일 때 2열로 변경 */
+            @media (max-width: 1024px) {
+                .comments {
+                    grid-template-columns: repeat(2, 1fr); /* 2열로 변경 */
+                }
+            }
+
+            /* 화면 크기가 768px 이하일 때 1열로 변경 */
+            @media (max-width: 768px) {
+                .comments {
+                    grid-template-columns: 1fr; /* 1열로 변경 */
+                }
+            }
+        </style>
+
+        <body>
+        <div class="bookmark-container">
+            <h2>나의 북마크</h2>
+            <div class="comments">
+                <!-- boardList 반복 출력 -->
+                <div th:each="board : ${boardList}">
+                    <!-- 카드 -->
+                    <a class="comment-card" th:href="@{/festival/details/{boardId}(boardId=${board.boardId})}">
+                        <!-- 해당 boardId에 매칭되는 bookmarks 반복 출력 -->
+                        <div class="comment" th:each="bookmark : ${bookmarks}" th:if="${bookmark.boardId} == ${board.boardId}">
+                            <div class="bookmark-title">
+                                <h4 th:text="${board.title}">축제명</h4>
+                                <button class="bookmark-btn" th:id="'bookmark-btn-' + ${bookmark.boardId}" aria-label="북마크">
+                                    <span class="bookmark-icon" th:id="'bookmark-icon-' + ${bookmark.boardId}" th:data-bookmarked="${bookmark.bookmark}">[[${bookmark.bookmark ? "♥" : "♡"}]]</span>
+                                </button>
+                            </div>
+                            <img class="festival-image" th:src="@{${board.imageUrl}}" alt="축제 이미지">
+                            <p class="festival-period" th:text="'축제 기간 : ' + ${board.period}">축제 기간</p>
+                            <p class="festival-location" th:text="'축제 장소 : ' + ${board.location}">축제 장소</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        </body>
+        <script>
+            $(document).ready(function () {
+                // 북마크 버튼 클릭 이벤트
+                $(document).on("click", ".bookmark-btn", function (event) {
+                    event.preventDefault();
+
+                    // 버튼 ID에서 boardId 추출
+                    const boardId = $(this).attr("id").split("-")[2]; // 'bookmark-btn-{boardId}' 형태에서 ID 추출
+                    const $bookmarkIcon = $(`#bookmark-icon-${boardId}`); // 해당 boardId의 북마크 아이콘
+
+                    // AJAX 요청으로 북마크 상태 변경
+                    $.ajax({
+                        type: "GET", // GET 요청
+                        url: `${location.origin}/api/map/${boardId}/bookmark`, // 동적 URL 생성
+                        success: function (response) {
+
+                            // 북마크 상태에 따라 아이콘 업데이트
+                            if (response.isBookmarked) {
+                                $bookmarkIcon.text("♥");
+                            } else {
+                                $bookmarkIcon.text("♡");
+                            }
+
+                        },
+                        error: function (error) {
+                            console.error("Error occurred while bookmarking:", error);
+                            alert("북마크 상태 변경에 실패했습니다.");
+                        }
+                    });
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                // 모든 북마크 아이콘을 초기화
+                document.querySelectorAll('[id^="bookmark-icon"]').forEach(icon => {
+                    const isBookmarked = icon.getAttribute("data-bookmarked") === "true";
+                    icon.textContent = isBookmarked ? "♥" : "♡";
+                });
+            });
+        </script>
+    </th:block>
+</th:block>

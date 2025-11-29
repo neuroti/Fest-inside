@@ -1,0 +1,311 @@
+:root {
+    --background-color: #09214e; /* 네이비 */
+    --text-color: #f7f8ff; /* 흰색 가까운 하늘 */
+    --accent-color: #6b8bf5; /* 하늘색 */
+    --other-color: #f1f1e6; /* 오트밀 */
+}
+
+@font-face {
+    font-family: 'UhBeeSe_hyun';
+    src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+body {
+    overflow-x: hidden;
+    margin-bottom: 100px;
+    box-sizing: border-box;
+    font-family: 'establishRetrosansOTF';
+}
+
+a {
+    text-decoration: none;
+    color: var(--background-color); /* 네이비 */
+}
+
+/* 네비게이션 바 스타일 */
+.basic-navbar {
+    max-width: 1920px;
+    margin: 10px;
+    position: relative;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center; /* 메뉴를 가운데로 정렬 */
+    align-items: center;
+}
+
+.basic-navbar_logo {
+    color: var(--background-color); /* 네이비 */
+    margin-right: auto; /* 로고를 왼쪽으로 고정 */
+    padding: 0 30px;
+    font-size: 16px;
+    font-family: 'UhBeeSe_hyun', sans-serif;
+}
+
+.basic-navbar_menu {
+    display: flex;
+    list-style: none;
+    justify-content: flex-start; /* 왼쪽 기준 수평 배치 */
+    align-items: center;
+    flex: 1; /* 메뉴가 남은 공간을 차지하도록 설정 */
+    font-size: 13px;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-weight: 900;
+}
+
+.basic-navbar_menu li {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 15px;
+}
+
+.basic-navbar_menu li:hover {
+    background-color: var(--text-color); /* 흰색 가까운 하늘 */
+    opacity: 0.3;
+}
+
+.basic-navbar_icons {
+    list-style: none;
+    display: flex;
+    margin-left: 20px;
+    margin-right: auto;
+}
+
+.basic-navbar_icons li {
+    font-size: 20px;
+    padding: 5px 15px;
+}
+
+.basic-navbar-toggleBtn {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--background-color); /* 네이비 */
+    padding: 5px 15px;
+}
+
+/* Dropdown 메뉴 스타일 */
+.dropdown-menu {
+    width: 300px;
+    padding: 20px;
+    background-color: #f9fafc;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    z-index: 10000; /* 드롭다운 메뉴가 최상단에 표시되도록 설정 */
+    position: absolute; /* 위치를 명확히 조정 */
+    top: 50px; /* 드롭다운 버튼 기준으로 아래에 배치 */
+    right: 0; /* 드롭다운 버튼 오른쪽 정렬 */
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+    font-family: 'S-CoreDream-3Light', sans-serif; /* 폰트 통일 */
+    font-size: 13px; /* basic-navbar_menu와 동일 */
+    font-weight: 900; /* basic-navbar_menu와 동일 */
+    color: var(--background-color); /* 네이비 */
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent-color); /* 하늘색 */
+}
+
+.profile-header h6,
+.profile-header p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.profile-header h6 {
+    font-weight: bold;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px; /* 내부 여백 */
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease, box-shadow 0.3s;
+    font-size: 13px; /* basic-navbar_menu와 동일 */
+    font-weight: 900; /* basic-navbar_menu와 동일 */
+    color: var(--background-color); /* 네이비 */
+}
+
+.menu-item:hover {
+    background-color: #eef2ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--background-color); /* 호버 시 네이비 유지 */
+}
+
+.menu-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.menu-item a {
+    text-decoration: none;
+    font-size: 13px; /* basic-navbar_menu와 동일 */
+    font-weight: 900; /* basic-navbar_menu와 동일 */
+    color: var(--background-color); /* 네이비 */
+    flex-grow: 1;
+}
+
+.menu-item a:hover {
+    color: var(--accent-color); /* 하늘색 강조 */
+}
+
+/* dropdown-item menu 기본 스타일 */
+.dropdown-item.menu {
+    background-color: var(--text-color); /* 기본 배경색 유지 */
+    border-radius: 8px; /* 둥근 모서리 */
+    padding: 10px 15px; /* 내부 여백 조정 */
+    transition: none; /* 배경색 전환 효과 제거 */
+}
+
+/* 클릭 시 배경색 변화를 막음 */
+.dropdown-item.menu:active {
+    background-color: var(--text-color) !important; /* 클릭 시에도 배경색 유지 */
+    outline: none; /* 포커스 테두리 제거 */
+}
+
+/* 포커스 시 배경색 변화를 막음 */
+.dropdown-item.menu:focus {
+    background-color: var(--text-color); /* 포커스 시에도 배경색 유지 */
+    outline: none; /* 포커스 테두리 제거 */
+}
+
+/* 호버 시 배경색 변화를 방지 */
+.dropdown-item.menu:hover {
+    background-color: var(--text-color); /* 호버 시에도 배경색 유지 */
+}
+
+/* 텍스트 스타일 유지 */
+.dropdown-item.menu a {
+    color: inherit; /* 부모 색상 상속 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+/* 아이콘과 텍스트 간 간격 조정 */
+.dropdown-item.menu img {
+    margin-right: 10px; /* 아이콘과 텍스트 사이 간격 */
+}
+
+
+.btn-outline-danger {
+    font-size: 12px;
+    padding: 6px 12px;
+    width: 100%;
+    text-align: center;
+}
+
+/* 오른쪽 고정 메뉴 스타일 */
+.fixed-menu {
+    position: absolute;
+    align-items: center;
+    top: 0px;
+    right: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px; /* 메뉴 간 간격 조정 */
+    list-style: none;
+    font-size: 13px; /* basic-navbar_menu와 동일 */
+    font-family: 'S-CoreDream-3Light', sans-serif; /* 폰트 통일 */
+    font-weight: 900; /* basic-navbar_menu와 동일 */
+    color: var(--background-color); /* 네이비 */
+    padding: 10px 15px; /* 내부 여백 추가 */
+    border-radius: 8px; /* 약간 둥글게 */
+}
+
+.fixed-menu .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.fixed-menu .nav-link {
+    color: var(--background-color); /* 네이비 */
+    font-size: 13px; /* basic-navbar_menu와 동일 */
+    font-weight: 900; /* basic-navbar_menu와 동일 */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 아이콘과 텍스트 간격 */
+    padding: 8px 12px; /* 내부 여백 */
+    border-radius: 5px; /* 약간 둥글게 */
+    transition: background-color 0.3s, color 0.3s;
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.fixed-menu .nav-link i {
+    font-size: 16px; /* 아이콘 크기 */
+    color: var(--background-color); /* 네이비 */
+    transition: transform 0.2s ease; /* 클릭 시 효과 */
+}
+
+.fixed-menu .nav-link:hover {
+    background-color: var(--text-color); /* 흰색 가까운 하늘 */
+    color: var(--background-color); /* 네이비 */
+    opacity: 0.9; /* 호버 시 약간 투명 */
+}
+
+.fixed-menu .nav-link:hover i {
+    transform: scale(1.2); /* 아이콘 확대 효과 */
+    color: var(--accent-color); /* 하늘색 강조 */
+}
+
+
+/* 반응형 디자인 */
+@media screen and (max-width: 900px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 5px;
+    }
+
+    .navbar_menu,
+    .navbar_icons {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar_menu li {
+        width: 100%;
+    }
+
+    .navbar_menu.active,
+    .navbar_icons.active {
+        display: flex;
+    }
+
+    .navbar_toggleBtn {
+        display: flex;
+    }
+}
+
+

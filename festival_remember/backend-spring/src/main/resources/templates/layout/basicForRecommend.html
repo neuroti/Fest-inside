@@ -1,0 +1,96 @@
+<th:block th:fragment="setContent(content, title)">
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+          xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title th:replace="${title}">레이아웃</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/2ae8fd07db.js" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" th:href="@{/css/layoutStyle/nav.css}">
+    </head>
+    <body>
+    <!-- 네비게이션 바 -->
+    <nav class="basic-navbar">
+        <div class="basic-navbar_logo">
+            <a th:href="@{/festival/home}">
+                <span style="color:#FF3232">F</span>
+                <span style="color:#FF8C0A">E</span>
+                <span style="color:#FFBE0A">S</span>
+                <span style="color:#2C952C">T</span>
+                <span style="color:#0A6E0A">I</span>
+                <span style="color:#28AEFF">V</span>
+                <span style="color:#9E37D1">A</span>
+                <span style="color:#FF87BE">L</span>
+            </a>
+        </div>
+
+        <div class="basic-navbar_menu">
+            <li><a th:href="@{/festival/home}">홈</a></li>
+            <li><a th:href="@{/festival/map}">관광정보</a></li>
+            <li><a th:href="@{/festival/recommend}">추천 축제</a></li>
+        </div>
+    </nav>
+
+    <!-- 오른쪽 고정 메뉴 -->
+    <ul class="fixed-menu">
+        <li class="nav-item dropdown">
+            <!-- 아이콘으로 드롭다운 열기 -->
+            <a class="nav-link dropdown-toggle fa-regular fa-user" href="#" id="myPageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="내정보">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="myPageDropdown">
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown-item profile-header">
+                        <h6><span th:text="${#authentication.principal.name}">사용자</span></h6>
+                        <p><strong>이메일:</strong> <span th:text="${#authentication.principal.email}">user@example.com</span></p>
+                    </div>
+                    <div class="dropdown-item menu">
+                        <div class="menu-item">
+                            <img src="https://img.icons8.com/ios-filled/50/6b8bf5/edit-user-male.png" alt="내 정보">
+                            <a th:href="@{/festival/myPage/myInfo}">내 정보 관리</a>
+                        </div>
+                        <div class="menu-item">
+                            <img src="https://img.icons8.com/ios-filled/50/6b8bf5/comments.png" alt="댓글">
+                            <a th:href="@{/festival/myPage/myComment}">내가 단 댓글</a>
+                        </div>
+                        <div class="menu-item">
+                            <img src="https://img.icons8.com/ios-filled/50/6b8bf5/bookmark.png" alt="북마크">
+                            <a th:href="@{/festival/myPage/myBookmark}">북마크</a>
+                        </div>
+                    </div>
+                    <form th:action="@{/festival/logout}" th:method="post" class="dropdown-item">
+                        <button class="btn btn-outline-danger btn-sm w-100">로그아웃</button>
+                    </form>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a class="dropdown-item" th:href="@{/festival/login}">로그인</a>
+                    <a class="dropdown-item" th:href="@{/festival/step1}">회원가입</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <script>
+        // 토글 버튼으로 메뉴 표시
+        const toggleBtn = document.querySelector('.navbar_toggleBtn');
+        const menu = document.querySelector('.navbar_menu');
+        const icons = document.querySelector('.navbar_icons');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                icons.classList.toggle('active');
+            });
+        }
+    </script>
+    <hr>
+    <!-- 메인 콘텐츠 -->
+        <th:block th:replace="${content}"></th:block>
+    </body>
+    </html>
+</th:block>

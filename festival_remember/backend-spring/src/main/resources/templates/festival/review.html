@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+
+    <title th:fragment="title">댓글 시스템</title>
+
+
+    <th:block th:fragment="content">
+
+        <style>
+            /*!* 전반적인 바디 스타일 *!*/
+            /*body {*/
+            /*    font-family: 'Arial', sans-serif;*/
+            /*    background-color: #f4f7fc;*/
+            /*    color: #333;*/
+            /*    margin: 0;*/
+            /*    padding: 0;*/
+            /*}*/
+
+            /*!* 댓글 목록 영역 *!*/
+            /*#reviews-section {*/
+            /*    background-color: #fff;*/
+            /*    border-radius: 8px;*/
+            /*    padding: 20px;*/
+            /*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+            /*    margin-bottom: 30px;*/
+            /*    max-width: 800px;*/
+            /*    margin: 20px auto;*/
+            /*}*/
+
+            /*#reviews-section h4 {*/
+            /*    font-size: 24px;*/
+            /*    margin-bottom: 15px;*/
+            /*    color: #333;*/
+            /*}*/
+
+            /*#reviews-list {*/
+            /*    list-style: none;*/
+            /*    padding: 0;*/
+            /*}*/
+
+            /*#reviews-list li {*/
+            /*    background-color: #f9f9f9;*/
+            /*    position: relative;*/
+            /*    padding: 15px;*/
+            /*    margin-bottom: 10px;*/
+            /*    border-radius: 8px;*/
+            /*    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);*/
+            /*    display: flex;*/
+            /*    flex-direction: column;*/
+            /*    !*justify-content: space-between;*!*/
+            /*    !*align-items: center;*!*/
+            /*    padding-top: 30px;*/
+            /*}*/
+
+
+            /*#reviews-list li p {*/
+            /*    margin: 0;*/
+            /*    flex-grow: 1;*/
+            /*    font-size: 16px;*/
+            /*    color: #555;*/
+            /*    margin-top: 40px;*/
+            /*}*/
+
+            /*!* 댓글 수정/삭제 버튼 *!*/
+            /*#reviews-list li button {*/
+            /*    background-color: #ffb6c1;*/
+            /*    color: #fff;*/
+            /*    border: none;*/
+            /*    padding: 4px 6px;*/
+            /*    font-size: 14px;*/
+            /*    border-radius: 3px;*/
+            /*    cursor: pointer;*/
+            /*    margin-left: 20px;*/
+            /*    transition: background-color 0.3s;*/
+            /*    top: 5px; !* 상단에서 5px *!*/
+            /*    right: 5px; !* 우측에서 5px *!*/
+            /*    width: 50px; !* 버튼의 고정 크기 *!*/
+            /*    height: 30px; !* 버튼의 고정 높이 *!*/
+            /*}*/
+
+            /*!* 수정 버튼 위치 조정 *!*/
+            /*#reviews-list li button.modify-btn {*/
+            /*    right: 62px; !* 수정 버튼이 삭제 버튼과 겹치지 않도록 우측에서 90px로 위치 이동 *!*/
+            /*}*/
+
+            /*#reviews-list li button:hover {*/
+            /*    background-color: #fd999e;*/
+            /*}*/
+
+            /*!* 댓글 추가 영역 *!*/
+            /*#add-review-section {*/
+            /*    max-width: 800px;*/
+            /*    margin: 0 auto;*/
+            /*    background-color: #fff;*/
+            /*    border-radius: 8px;*/
+            /*    padding: 20px;*/
+            /*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+            /*}*/
+
+            /*#review-content {*/
+            /*    width: 100%;*/
+            /*    padding: 10px;*/
+            /*    border-radius: 8px;*/
+            /*    border: 1px solid #ddd;*/
+            /*    font-size: 16px;*/
+            /*    resize: vertical;*/
+            /*    box-sizing: border-box;*/
+            /*    margin-bottom: 15px;*/
+            /*    transition: border-color 0.3s;*/
+            /*    background-color: #f7f7f7;*/
+            /*}*/
+
+            /*#review-content:focus {*/
+            /*    border-color: #ffb6c1;*/
+            /*    outline: none;*/
+            /*}*/
+
+            /*#add-review-button {*/
+            /*    background-color: #ffb6c1;*/
+            /*    color: #fff;*/
+            /*    border: none;*/
+            /*    padding: 10px 20px;*/
+            /*    font-size: 16px;*/
+            /*    border-radius: 5px;*/
+            /*    cursor: pointer;*/
+            /*    width: 100%;*/
+            /*    transition: background-color 0.3s;*/
+            /*}*/
+
+            /*#add-review-button:hover {*/
+            /*    background-color: #fd999e;*/
+            /*}*/
+
+            /*!* 별점 스타일 *!*/
+            /*.stars {*/
+            /*    position: absolute;*/
+            /*    top: 5px;*/
+            /*    left: 10px;*/
+            /*    display: flex;*/
+            /*    gap: 2px; !* 별 간격 *!*/
+            /*}*/
+
+            /*.stars i {*/
+            /*    font-size: 16px;*/
+            /*    color: #FFD700; !* 금색 *!*/
+            /*}*/
+
+            /*!* 별점 선택 버튼 스타일 *!*/
+            /*.rating {*/
+            /*    display: flex;*/
+            /*    gap: 5px; !* 별 간격 *!*/
+            /*}*/
+
+            /*.rating i {*/
+            /*    font-size: 16px; !* 별 크기 *!*/
+            /*    color: #FFD700; !* 기본 색은 회색 *!*/
+            /*    cursor: pointer;*/
+            /*    transition: color 0.2s ease-in-out;*/
+            /*}*/
+
+            /*.edit-stars {*/
+            /*    cursor: pointer;*/
+            /*    color: #f39c12;*/
+            /*    animation: pulse 1s infinite alternate;*/
+            /*}*/
+
+            /*@keyframes pulse {*/
+            /*    0% {*/
+            /*        transform: scale(1);*/
+            /*    }*/
+            /*    100% {*/
+            /*        transform: scale(1.1);*/
+            /*    }*/
+            /*}*/
+
+            /*textarea {*/
+            /*    width: 100%; !* 텍스트 영역 너비 *!*/
+            /*    padding: 10px;*/
+            /*    font-size: 16px;*/
+            /*    border: 1px solid #ccc;*/
+            /*    margin-top: 10px;*/
+            /*}*/
+
+            /*button {*/
+            /*    padding: 10px 15px;*/
+            /*    color: white;*/
+            /*    border: none;*/
+            /*    margin-top: 10px;*/
+            /*    cursor: pointer;*/
+            /*}*/
+
+            /*!* 작은 화면에 대한 반응형 *!*/
+            /*@media (max-width: 768px) {*/
+            /*    #reviews-section, #add-review-section {*/
+            /*        padding: 15px;*/
+            /*    }*/
+
+            /*    #review-content {*/
+            /*        font-size: 14px;*/
+            /*    }*/
+
+            /*    #add-review-button {*/
+            /*        font-size: 14px;*/
+            /*    }*/
+
+            /*    #reviews-list li {*/
+            /*        flex-direction: column;*/
+            /*        align-items: flex-start;*/
+            /*    }*/
+
+            /*    #reviews-list li button {*/
+            /*        margin-top: 10px;*/
+            /*        width: 100%;*/
+            /*    }*/
+            /*}*/
+
+            /*.load-more-btn {*/
+            /*    display: block; !* 버튼을 중앙으로 정렬하기 위해 block 속성 *!*/
+            /*    margin: 10px auto; !* 자동으로 좌우 여백 배치 *!*/
+            /*    padding: 8px 16px;*/
+            /*    background-color: #007bff;*/
+            /*    color: white;*/
+            /*    border: none;*/
+            /*    border-radius: 4px;*/
+            /*    cursor: pointer;*/
+            /*    font-size: 14px;*/
+            /*}*/
+
+            /*.load-more {*/
+            /*    text-align: center;*/
+            /*}*/
+
+
+            /* 기본 CSS 스타일 */
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* 댓글 리스트 스타일 */
+            #reviews-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .review-item {
+                padding: 10px;
+                border: 1px solid #ddd;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+                position: relative;
+            }
+
+
+            /* 별점 위치 */
+            .stars {
+                display: inline-block;
+                font-size: 14px;
+                color: #f1c40f;
+            }
+
+            /* 댓글 헤더 스타일 */
+            .review-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+            }
+
+            .review-author {
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            .review-timestamp {
+                font-size: 12px;
+                color: #888;
+                margin-left: 10px;
+            }
+
+            /* 댓글 내용 스타일 */
+            .review-content {
+                margin-bottom: 10px;
+                line-height: 1.5;
+            }
+
+            /* 수정 및 삭제 버튼 위치 */
+            .review-actions {
+                text-align: right;
+                margin-top: 5px;
+            }
+
+
+            .modify-btn, .delete-btn, .reply-btn {
+                background-color: #007bff;
+                border: none;
+                border-radius: 3px;
+                color: #fff;
+                cursor: pointer;
+                padding: 5px 10px;
+                font-size: 0.9em;
+            }
+
+            .modify-btn:hover, .delete-btn:hover, .reply-btn:hover {
+                background-color: #0056b3;
+            }
+
+            /* 대댓글 리스트 스타일 */
+            .replies-list {
+                list-style: none;
+                margin-top: 10px;
+                padding-left: 20px;
+            }
+
+            .reply-item {
+                padding: 5px;
+                border: 1px solid #ddd;
+                margin-bottom: 5px;
+                margin-left: 20px;
+                background-color: #fff;
+                position: relative;
+                border-radius: 3px;
+            }
+
+            .reply-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+            }
+
+            .reply-author {
+                font-weight: bold;
+                font-size: 12px;
+            }
+
+            .reply-timestamp {
+                font-size: 12px;
+                color: #888;
+                margin-left: 10px;
+            }
+
+            .reply-actions {
+                text-align: right;
+                margin-top: 5px;
+            }
+
+            .reply-content {
+                font-size: 13px;
+                margin-bottom: 5px;
+            }
+
+            /* 더보기 버튼 스타일 */
+            .load-more-btn {
+                background-color: #f1c40f;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            .load-more-btn:hover {
+                background-color: #d4ac0d;
+            }
+
+
+            /* 대댓글 입력란 스타일 */
+            .reply-input {
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .reply-textarea {
+                flex-grow: 1;
+                height: 40px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 5px;
+                margin-right: 10px;
+            }
+
+
+            .submit-reply-btn {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            .submit-reply-btn:hover {
+                background-color: #2980b9;
+            }
+
+        </style>
+
+
+        <body>
+            <div id="reviews-section">
+                <div>
+                    <span id="currentUserName" th:text="${idName}" style="display: none;"></span>
+                </div>
+                <div class="review-summary">
+                    <span th:text="'⭐ 평균 별점: ' + ${avgRating}">⭐ 평균 별점: 0.0</span>
+                    <span th:text="'💬 댓글 수: ' + ${reviewCount}">💬 댓글 수: 0</span>
+                </div>
+                <h3>축제의 후기를 남겨주세요!</h3>
+                <ul id="reviews-list"></ul>
+            </div>
+
+            <div id="add-review-section">
+                <div id="star-rating" class="rating">
+                    <i class="far fa-star" data-value="1"></i>
+                    <i class="far fa-star" data-value="2"></i>
+                    <i class="far fa-star" data-value="3"></i>
+                    <i class="far fa-star" data-value="4"></i>
+                    <i class="far fa-star" data-value="5"></i>
+                </div>
+                <textarea id="review-content" rows="5" cols="80" placeholder="후기를 남겨주세요"></textarea>
+                <button id="add-review-button">등록</button>
+            </div>
+        </body>
+
+        <script>
+            // URL에서 boardId 추출
+            const url = window.location.pathname; // 예: "/festival/details/3"
+            const boardId = url.split('/').pop(); // "3"
+
+
+            let selectedRating = 0;
+            let isEditingRe = {};
+            let isEditingRre = {};
+
+            // 댓글 목록 조회 함수
+            function fetchReviews() {
+
+                const currentUser = document.getElementById('currentUserName').textContent.trim(); // 숨겨진 값 가져오기
+                console.log("현재 사용자:", currentUser);
+
+                $.get(`/festival/review/get/${boardId}`, function(data) {
+                    const reviewsList = $("#reviews-list");
+                    reviewsList.empty();
+
+                    if (data.reviews && data.reviews.length > 0) {
+                        data.reviews.forEach(review => {
+                            const stars = generateStars(review.rating);
+                            const isOwnReview = review.author === currentUser; // 작성자와 현재 사용자가 같은지 확인
+
+                            reviewsList.append(`
+                    <li id="review-${review.reviewId}" class="review-item">
+                        <div class="review-header">
+                            <span class="review-author">${review.author}</span>
+                            <span class="review-timestamp">${review.regDate}</span>
+                        </div>
+                        <div class="stars" data-review-id="${review.reviewId}" data-rating="${review.rating}">${stars}</div>
+                        <div class="review-content">${review.content}</div>
+                        <div class="review-actions">
+                            ${isOwnReview ? `
+                                <button class="modify-btn" data-review-id="${review.reviewId}" data-content="${review.content}">수정</button>
+                                <button class="delete-btn" data-review-id="${review.reviewId}">삭제</button>
+                            ` : ''}
+                            <button class="reply-btn" data-review-id="${review.reviewId}">답글쓰기</button>
+                        </div>
+                        <ul class="replies-list" id="replies-${review.reviewId}"></ul>
+                    </li>
+                `);
+                            fetchReplies(review.reviewId); // 첫 페이지 대댓글 로드
+                        });
+
+                        $(".modify-btn").on("click", function() {
+                            const reviewId = $(this).data("review-id");
+                            handleModifyButtonClick(reviewId);
+                        });
+
+                        $(".delete-btn").on("click", function() {
+                            const reviewId = $(this).data("review-id");
+                            deleteReview(reviewId);
+                        });
+
+                        $(".reply-btn").on("click", function() {
+                            const reviewId = $(this).data("review-id");
+                            openReplyInput(reviewId); // 답글 입력창 열기
+                        });
+                    } else {
+                        reviewsList.append("<li>댓글이 없습니다.</li>");
+                    }
+                }).fail(function() {
+                    alert("댓글 목록을 불러오는 데 실패했습니다.");
+                });
+            }
+
+
+            // 특정 리뷰에 연결된 대댓글을 가져오는 함수
+            function fetchReplies(rootNum) {
+                const currentUser = document.getElementById('currentUserName').textContent.trim(); // 숨겨진 값 가져오기
+
+                $.get(`/festival/review/view/${rootNum}`, function (data) {
+                    const repliesList = $(`#replies-${rootNum}`);
+                    repliesList.empty();
+
+                    if (data.replies && data.replies.length > 0) {
+                        data.replies.forEach((reply, index) => {
+                            const isOwnReply = reply.author === currentUser; // 작성자와 현재 사용자 비교
+                            console.log(isOwnReply)
+                            const isHidden = index >= 5 ? 'style="display:none;"' : '';
+
+                            repliesList.append(`
+                            <li id="reply-${reply.reviewId}" class="reply-item" ${isHidden}>
+                                <div class="reply-header">
+                                    <span class="reply-author">${reply.author}</span>
+                                    <span class="reply-timestamp">${reply.regDate}</span>
+                                </div>
+                                <div class="reply-content">${reply.content}</div>
+                                <div class="reply-actions">
+                                    ${isOwnReply ? `
+                                        <button class="reply-modify-btn" data-reply-id="${reply.reviewId}">수정</button>
+                                        <button class="reply-delete-btn" data-reply-id="${reply.reviewId}">삭제</button>
+                                    ` : ''}
+                                </div>
+                            </li>
+                        `);
+                        });
+
+                        $(".reply-modify-btn").on("click", function () {
+                            const replyId = $(this).data("reply-id");
+                            console.log(replyId)
+                            handleReplyModifyButtonClick(replyId);
+                        });
+
+                        $(".reply-delete-btn").on("click", function () {
+                            const replyId = $(this).data("reply-id");
+                            console.log(replyId)
+                            deleteReview(replyId);
+                        });
+                if (data.replies.length > 5) {
+                    repliesList.append(`
+                    <li class="load-more" style="text-align: center;">
+                        <button class="load-more-btn" onclick="toggleReplies('${rootNum}', this)">더보기</button>
+                    </li>
+                    `);
+
+                }
+                }else {
+                        repliesList.append("<li>댓글이 없습니다.</li>");
+                }
+                }).fail(function () {
+                    alert("댓글 목록을 불러오는 데 실패했습니다.");
+                });
+
+            }
+
+
+            //더보기 토글 함수
+            function toggleReplies(rootNum, button) {
+                const repliesList = $(`#replies-${rootNum}`);
+                const hiddenReplies = repliesList.find("li[style='display:none;']");
+
+                if (hiddenReplies.length > 0) {
+                    hiddenReplies.show();
+                    button.textContent = "접기";
+                }//숨겨진 대댓글이 있으면~~ 끝
+                else {
+                    repliesList.find(".reply-item").slice(5).hide(); //5개 이후 다시 숨김
+                    button.textContent = "더보기";
+                    fetchReplies(rootNum)
+                } //없으면 ~~~ 끝
+            } //toggle함수 끗
+
+            // 타임스탬프 포맷 함수
+            function formatTimestamp(timestamp) {
+                const date = new Date(timestamp);
+                return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+            }
+
+            // 답글 입력창 열기 함수
+            function openReplyInput(reviewId) {
+                const repliesList = $(`#replies-${reviewId}`);
+
+                if (repliesList.find(".reply-input").length > 0) {
+                    return;
+                }
+                repliesList.append(`
+                    <li class="reply-input">
+                        <textarea class="reply-textarea" placeholder="답글을 입력하세요"></textarea>
+                        <button class="submit-reply-btn" data-review-id="${reviewId}">등록</button>
+                    </li>
+                `);
+
+                repliesList.find(".submit-reply-btn").on("click", function() {
+                    const content = $(this).siblings(".reply-textarea").val();
+                    if (content.trim() === "") {
+                        alert("내용을 입력하세요.");
+                        return;
+                    }
+
+                    // 답글 등록 요청
+                    $.ajax({
+                        url: `/festival/review/reply/${reviewId}`,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({content: content}),
+                        success: function () {
+                            fetchReplies(reviewId);
+                            alert("답글을 등록하였습니다.")
+                        }, //성공시에~~
+                        error: function () {
+                            alert("답글 등록에 실패하였습니다.")
+                        }
+                    })//ajax 끝
+                });
+            }
+
+            // 댓글 추가 함수
+            $("#add-review-button").on("click", function() {
+                const content = $("#review-content").val();
+
+
+                if (!content.trim()) {
+                    alert("내용을 입력해주세요.");
+                    return;
+                }
+
+                if(selectedRating === 0){
+                    alert("별점을 선택해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    url: `/festival/review/add/${boardId}`,
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        content: content,
+                        rating: selectedRating
+                    }),
+                    success: function() {
+                        alert("댓글이 추가되었습니다.");
+                        $("#review-content").val(""); // 입력 필드 초기화
+                        resetStars();
+                        fetchReviews(); // 댓글 목록 새로고침
+                    },
+                    error: function(err) {
+                        alert(err.responseJSON?.message || "댓글 추가에 실패했습니다.");
+                    }
+                });
+                location.reload();
+            });
+
+            // 댓글 삭제 함수
+            function deleteReview(reviewId) {
+
+                console.log(reviewId);
+
+
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: `/festival/review/delete/${reviewId}`,
+                        method: "DELETE",
+                        success: function() {
+                            alert("댓글이 삭제되었습니다.");
+                            fetchReviews();
+                        },
+                        error: function(err) {
+                            console.log(err);
+                            alert(err.responseJSON?.message || "댓글 삭제에 실패했습니다.");
+                        }
+                    });
+                }
+
+                location.reload();
+            }
+
+
+            function deleteReply(replyId) {
+
+                console.log(replyId)
+
+                if (confirm("정말로 대댓글을 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: `/festival/review/delete/${replyId}`,
+                        method: "DELETE",
+                        success: function () {
+                            alert("대댓글이 삭제되었습니다.");
+                            $(`#reply-${replyId}`).remove(); // 삭제된 대댓글 UI에서 제거
+                        },
+                        error: function (err) {
+                            alert(err.responseJSON?.message || "대댓글 삭제에 실패했습니다.");
+                        }
+                    });
+                }
+            }
+
+
+            // 댓글 수정 함수
+            function handleModifyButtonClick(reviewId) {
+
+                const starsDiv = $(`#review-${reviewId} .stars`);
+                const contentP = $(`#review-${reviewId} .review-content`);
+                const modifyButton = $(`#review-${reviewId} .modify-btn`);
+
+                if (!isEditingRe[reviewId]) {
+                    isEditingRe[reviewId] = true;
+
+                    let currentRating = starsDiv.data("rating") || 0;
+                    const currentContent = modifyButton.data("content");
+                    console.log(currentContent)
+
+
+                    starsDiv.html(generateStars(currentRating)); // 기존 별점 표시
+
+                    starsDiv.find("i").on("click", function () {
+                        const newRating = $(this).index() + 1; // 클릭한 별점 값
+                        updateStarsForReview(reviewId, newRating);
+                    });
+
+                    const contentInput = $(`<textarea class="content-input" rows="3">${currentContent}</textarea>`);
+                    contentP.replaceWith(contentInput);
+
+                    modifyButton.text("수정")
+
+                } else {
+
+                    const newRating = starsDiv.data("rating") || 0;
+                    const newContent = $(`#review-${reviewId} .content-input`).val();
+
+
+                    if (!newContent.trim()) {
+                        alert("내용을 입력해주세요.");
+                        return;
+                    }
+
+                    if (newRating === 0) {
+                        alert("별점을 선택해주세요.");
+                        return;
+                    }
+
+
+                    $.ajax({
+                        url: `/festival/review/modify/${reviewId}`,
+                        method: "PUT",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            content: newContent,
+                            rating: newRating
+                        }),
+                        success: function () {
+                            alert("댓글이 수정되었습니다.")
+                            isEditingRe[reviewId] = false
+                            fetchReviews();
+                        },
+                        error: function (err) {
+                            alert(err.responseJSON?.message || "댓글 수정에 실패했습니다.");
+                            isModifying = false;
+                        }
+                    });
+                }
+
+                location.reload();
+            }
+
+        function handleReplyModifyButtonClick(replyId) {
+                const replyContentDiv = $(`#reply-${replyId} .reply-content`);
+                const modifyButton = $(`#reply-${replyId} .reply-modify-btn`);
+
+                if (!isEditingRre[replyId]) {
+                    isEditingRre[replyId] = true;
+
+                    const currentContent = replyContentDiv.text().trim();
+                    const contentInput = $(`<textarea class="reply-content-input" rows="2">${currentContent}</textarea>`);
+
+                    replyContentDiv.replaceWith(contentInput);
+                    modifyButton.text("저장");
+                } else {
+                    const newContent = $(`#reply-${replyId} .reply-content-input`).val();
+
+                    if (!newContent.trim()) {
+                        alert("내용을 입력해주세요.");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `/festival/review/modify/${replyId}`,
+                        method: "PUT",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            content: newContent
+                        }),
+                        success: function () {
+                            alert("대댓글이 수정되었습니다.");
+                            isEditingRre[replyId] = false;
+                            fetchReplies(replyId); // 수정된 대댓글 목록 다시 로드
+                        },
+                        error: function (err) {
+                            alert(err.responseJSON?.message || "대댓글 수정에 실패했습니다.");
+                            isEditingRre[replyId] = false;
+                        }
+                    });
+                }
+            location.reload();
+        }
+
+
+            function updateStarsForReview(reviewId, rating){
+                const starsDiv = $(`#review-${reviewId} .stars`);
+                starsDiv.data("rating", rating);
+                starsDiv.html(generateStars(rating));
+                starsDiv.addClass("edit-stars");
+
+                starsDiv.find("i").on("click", function (){
+                    const newRating = $(this).index() + 1;
+                    starsDiv.data("rating", newRating);
+                    starsDiv.html(generateStars(newRating));
+                    updateStarsForReview(reviewId, newRating);
+                });
+
+            }
+
+
+            function resetStars(){
+                selectedRating = 0;
+                $("star-rating i").removeClass("fas").addClass("far")
+            }
+
+            function updateStars(rating){
+                selectedRating = rating
+                $("#star-rating i").each(function (index){
+                    $(this).toggleClass("fas", index < rating)
+                    $(this).toggleClass("far", index >= rating)
+                })
+            }
+
+            $("#star-rating i").on("click", function() {
+                const rating = $(this).data("value");
+                updateStars(rating);
+            });
+
+
+            function generateStars(rating) {
+                const maxStars = 5; // 별점의 최대값
+                const fullStar = '<i class="fas fa-star"></i>'; // 꽉 찬 별
+                const emptyStar = '<i class="far fa-star"></i>'; // 빈 별
+
+                let stars = '';
+
+                // 꽉 찬 별 추가
+                for (let i = 0; i < Math.floor(rating); i++) {
+                    stars += fullStar;
+                }
+
+                // 빈 별 추가
+                for (let i = Math.floor(rating); i < maxStars; i++) {
+                    stars += emptyStar;
+                }
+
+                return stars;
+            }
+
+            const avgRatingElement = document.querySelector(".review-summary span:nth-child(1)");
+            const reviewCountElement = document.querySelector(".review-summary span:nth-child(2)");
+
+            async function fetchReviewSummary() {
+                // URL에서 boardId 추출
+                const url = window.location.pathname; // 예: "/festival/details/3"
+                const boardId = url.split('/').pop(); // "3"
+                try {
+
+                    const response = await  fetch(`/festival/review/about/${boardId}`)
+                    const data = await response.json();
+
+                    avgRatingElement.textContent = `⭐ 평균 별점: ${data.avgRating}`
+                    reviewCountElement.textContent = `💬 댓글 수: ${data.reviewCount}`
+
+                } catch (error){
+                    console.error("리뷰 정보를 가져오는 중 오류가 발생", error)
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                fetchReviewSummary(boardId)
+            });
+
+            // 페이지 로드 시 댓글 목록 가져오기
+            $(document).ready(function() {
+                fetchReviews();
+                fetchReviewSummary();
+
+            });
+
+
+        </script>
+    </th:block>
+</th:block>
+

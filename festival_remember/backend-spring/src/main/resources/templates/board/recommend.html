@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basicForRecommend::setContent(~{this::content},~{this::title})}">
+    <div class="fixed-header">
+        <title th:fragment="title">추천 축제</title>
+        <th:block th:fragment="content"></th:block>
+    </div>
+</th:block>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/board/recommend.css}">
+</head>
+
+<body>
+<div class="container">
+    <div class="recommend-title">나만의 맞춤 축제 탐험</div>
+
+    <!-- 추천 슬라이드 -->
+    <div class="recommend-carousel">
+        <button id="arrow-left" class="arrow arrow-left hidden" onclick="moveCarousel(-1)">
+            <!-- 왼쪽 화살표 아이콘 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+        </button>
+        <div class="recommend-list-wrapper">
+            <div class="recommend-list" id="carousel">
+                <!-- 축제 카드 반복 -->
+                <div th:each="board : ${recommendList}" class="card">
+                    <a th:href="'/festival/details/' + ${board.boardId}">
+                        <img th:src="${board.imageUrl}" alt="축제 이미지">
+                        <div class="card-content">
+                            <div class="card-title" th:text="${board.title}">축제 제목</div>
+                            <div class="card-location" th:text="'위치: ' + ${board.location}">위치: </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <button id="arrow-right" class="arrow arrow-right hidden" onclick="moveCarousel(1)">
+            <!-- 오른쪽 화살표 아이콘 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- MBTI별 추천 섹션 -->
+    <div class="recommend-list-view">
+        <div class="recommend-title">MBTI에 따라 어떤 축제와 어울릴까?</div>
+
+        <!-- MBTI 타입 선택 영역 -->
+        <div class="mbti-tabs">
+            <div class="mbti-pill">
+                <button class="mbti-tab-button mbti-top active" onclick="selectMbti(this)" data-key-group="E_I" data-key="E">외향형 (E)</button>
+                <button class="mbti-tab-button mbti-bottom" onclick="selectMbti(this)" data-key-group="E_I" data-key="I">내향형 (I)</button>
+            </div>
+            <div class="mbti-pill">
+                <button class="mbti-tab-button mbti-top active" onclick="selectMbti(this)" data-key-group="S_N" data-key="S">감각형 (S)</button>
+                <button class="mbti-tab-button mbti-bottom" onclick="selectMbti(this)" data-key-group="S_N" data-key="N">직관형 (N)</button>
+            </div>
+            <div class="mbti-pill">
+                <button class="mbti-tab-button mbti-top active" onclick="selectMbti(this)" data-key-group="T_F" data-key="T">사고형 (T)</button>
+                <button class="mbti-tab-button mbti-bottom" onclick="selectMbti(this)" data-key-group="T_F" data-key="F">감정형 (F)</button>
+            </div>
+            <div class="mbti-pill">
+                <button class="mbti-tab-button mbti-top active" onclick="selectMbti(this)" data-key-group="J_P" data-key="J">판단형 (J)</button>
+                <button class="mbti-tab-button mbti-bottom" onclick="selectMbti(this)" data-key-group="J_P" data-key="P">인식형 (P)</button>
+            </div>
+        </div>
+
+        <div class="mbti-recommend-sections">
+            <div th:each="entry : ${mbtiRecommendMap}" class="mbti-section" th:data-key="${entry.key}" style="display: none;">
+                <div class="recommend-cards">
+                    <div th:each="board : ${entry.value}" class="recommend-card">
+                        <a th:href="'/festival/details/' + ${board.boardId}" class="card-link">
+                            <div class="card-thumbnail">
+                                <img th:src="${board.imageUrl}" alt="축제 이미지" class="card-image" />
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title" th:text="${board.title}">축제 제목</div>
+                                <div class="card-location" th:text="'위치: ' + ${board.location}">위치</div>
+                                <div class="card-period" th:text="'기간: ' + ${board.period}">기간</div>
+                                <div class="card-contact" th:text="'문의: ' + ${board.contact}">문의</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let selectedMbti = { E_I: 'E', S_N: 'S', T_F: 'T', J_P: 'J' }; // 기본값을 'E', 'S', 'T', 'J'로 설정
+    let currentPosition = 0;  // 현재 슬라이드 위치
+    let totalItems = 0;       // 총 축제 카드 개수
+
+    // 각 슬라이드 아이템의 너비를 가져오는 함수
+    function getItemWidth() {
+        const carousel = document.getElementById('carousel');
+        const itemWidth = carousel.children[0].offsetWidth + parseInt(getComputedStyle(carousel.children[0]).marginRight);
+        return itemWidth;
+    }
+
+    // 화살표 상태 업데이트 (처음/끝 슬라이드에서 화살표 숨기기)
+    function updateArrows() {
+        const arrowLeft = document.getElementById('arrow-left');
+        const arrowRight = document.getElementById('arrow-right');
+        const carousel = document.getElementById('carousel');
+
+        totalItems = carousel.children.length;
+
+        // 4개의 아이템만 한 번에 보이므로 visibleItems는 4로 설정
+        const visibleItems = 4;
+        const maxPosition = Math.max(0, Math.ceil(totalItems / visibleItems) - 1);
+
+        arrowLeft.classList.toggle('hidden', currentPosition === 0);   // 첫 번째 위치에서 왼쪽 화살표 숨기기
+        arrowRight.classList.toggle('hidden', currentPosition === maxPosition);  // 마지막 위치에서 오른쪽 화살표 숨기기
+    }
+
+    // 슬라이드 이동 함수
+    function moveCarousel(direction) {
+        const carousel = document.getElementById('carousel');
+        const itemWidth = getItemWidth();
+        const visibleItems = 4;  // 한 번에 보여줄 카드의 개수
+        const totalWidth = itemWidth * totalItems;  // 전체 너비
+
+        // 새로운 위치 계산
+        currentPosition += direction;
+
+        // 위치를 조정하여 범위를 벗어나지 않도록 설정
+        const maxPosition = Math.max(0, Math.ceil(totalItems / visibleItems) - 1);
+        currentPosition = Math.max(0, Math.min(currentPosition, maxPosition));
+
+        // 슬라이드 이동
+        carousel.style.transform = `translateX(-${currentPosition * itemWidth}px)`;
+
+        // 화살표 업데이트
+        updateArrows();
+    }
+
+    function selectMbti(buttonElement) {
+        const keyGroup = buttonElement.getAttribute('data-key-group');
+        const key = buttonElement.getAttribute('data-key');
+
+        // Update selected MBTI
+        selectedMbti[keyGroup] = key;
+
+        // Update button styles within the same pill
+        const buttons = document.querySelectorAll(`.mbti-tab-button[data-key-group="${keyGroup}"]`);
+        buttons.forEach((btn) => btn.classList.remove('active'));
+        buttonElement.classList.add('active');
+
+        // Check if all groups are selected
+        const mbtiKeys = Object.values(selectedMbti);
+        if (mbtiKeys.every((value) => value !== null)) {
+            const combinedKey = mbtiKeys.join('');
+            showMbtiSection(combinedKey);
+        }
+    }
+
+    function showMbtiSection(combinedKey) {
+        const allSections = document.querySelectorAll('.mbti-section');
+        allSections.forEach((section) => (section.style.display = 'none'));
+
+        const targetSection = document.querySelector(`.mbti-section[data-key="${combinedKey}"]`);
+        if (targetSection) targetSection.style.display = 'flex';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 기본적으로 'E', 'S', 'T', 'J'가 선택된 상태로 보여주기
+        const defaultKeys = ['E', 'S', 'T', 'J'];
+        defaultKeys.forEach(key => {
+            const button = document.querySelector(`.mbti-tab-button[data-key="${key}"]`);
+            if (button) selectMbti(button);
+        });
+
+        updateArrows();
+        window.addEventListener('resize', updateArrows);
+    });
+</script>
+</html>

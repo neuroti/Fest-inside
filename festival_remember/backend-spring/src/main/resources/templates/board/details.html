@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @font-face {
+             font-family: 'S-CoreDream-3Light';
+             src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+             font-weight: normal;
+             font-style: normal;
+        }
+        body {
+            background-color: #f7f8ff;
+        }
+        /* 기본 스타일 정의 */
+        .allPage {
+            font-family: 'S-CoreDream-3Light';
+        }
+
+        /* 공통 스타일: 버튼 테두리 제거 */
+        .festival-container .festival-layout button {
+            background: none; /* 배경 제거 */
+            border: none; /* 테두리 제거 */
+            padding: 0; /* 내부 여백 제거 */
+            margin: 0; /* 외부 여백 제거 */
+            cursor: pointer; /* 클릭 가능한 포인터 */
+            display: inline-flex; /* 아이콘과 텍스트 정렬 */
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 버튼 내부 이미지 스타일 */
+        .festival-container .festival-layout button img {
+            display: block; /* 이미지를 블록 요소로 설정 */
+            width: 24px; /* 적절한 크기로 설정 */
+            height: 24px;
+            object-fit: contain; /* 이미지 크기 조정 */
+            border: none; /* 이미지 테두리 제거 */
+            margin: 0; /* 외부 여백 제거 */
+            padding: 0; /* 내부 여백 제거 */
+            box-shadow: none; /* 그림자 제거 */
+        }
+
+        /* 개별 버튼 추가 스타일 */
+        #heart {
+            transition: transform 0.2s ease; /* 호버 시 부드러운 크기 변화 */
+        }
+
+        #heart:hover {
+            transform: scale(1.1); /* 호버 시 약간 확대 */
+        }
+
+        #linkImage, #routeImage {
+            width: 20px; /* 링크 및 길찾기 아이콘 크기 */
+            height: 20px;
+        }
+
+        #linkImage:hover,
+        #routeImage:hover {
+            opacity: 0.8; /* 호버 시 투명도 */
+        }
+        #detail-restaurant {
+            display: flex;                  /* Flexbox 활성화 */
+            flex-wrap: wrap;                 /* 여러 줄로 표시 */
+            justify-content: space-between; /* 항목 간의 간격을 균등하게 */
+            gap: 20px;                       /* 각 항목 간의 간격 설정 */
+            margin-top: 20px;
+        }
+        .restaurant-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .restaurant-item {
+            flex: 1 1 calc(33% - 20px);      /* 한 줄에 3개로 표시, 간격을 고려하여 너비 설정 */
+            box-sizing: border-box;          /* padding 및 border 포함하여 크기 계산 */
+            padding: 20px;
+            border: 1px solid #ccd2d5;
+            border-radius: 8px;
+            background-color: #eaf7ff;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        .restaurant-item:hover {
+            transform: translateY(2px);  /* 클릭 시 아래로 4px 이동 */
+            /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); !* 살짝 그림자 추가 *!*/
+        }
+
+        /* 제목과 주소, 이미지 스타일 */
+        .restaurant-item h3 {
+            font-size: 21px;
+            font-weight: 700;
+            color: #333;
+            margin: 1rem 0 10px 0;
+        }
+        .restaurant-item p {
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 0;
+        }
+        .restaurant-item .category-image {
+            width: 180px;
+            height: 180px;
+        }
+        #detail-map {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            border: 2px solid #ede9e9;
+            overflow: hidden;  /* 테두리가 나가지 않게 설정 */
+        }
+
+        .reviewPage {
+        }
+
+        /* 주소 복사하기, 길찾기 스타일 */
+        #heart, #copyLink, #openRouteMap {
+            padding: 0;
+            background-color: transparent;
+        }
+        #heart, #linkImage, #routeImage {
+            width: 40px;
+            height: 40px;
+            margin: 0 10px 5px 0;
+        }
+        .board-btn {
+            background-color: transparent;
+            margin: 0;
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+        }
+        .board-btn:hover {
+            background-color: transparent;
+        }
+
+        /* 반응형 디자인: 화면 크기가 768px 이하일 때 */
+        @media (max-width: 768px) {
+            #detail-map {
+                height: 350px;
+            }
+            #linkImage {
+                width: 25px;
+                height: 25px;
+            }
+            #routeImage {
+                width: 30px;
+                height: 30px;
+            }
+            #heart {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        /* 반응형 디자인: 화면 크기가 576px 이하일 때 */
+        @media (max-width: 576px) {
+            #detail-map {
+                height: 300px;
+            }
+            #linkImage {
+                width: 20px;
+                height: 20px;
+            }
+            #routeImage {
+                width: 25px;
+                height: 25px;
+            }
+            #heart {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}">
+    <div class="fixed-header">
+        <title th:fragment="title">상세 페이지</title>
+        <th:block th:fragment="content"></th:block>
+    </div>
+</th:block>
+<div class="container">
+    <!-- 북마크 버튼, 주소 복사 버튼 -->
+    <div class="festival-container">
+        <div class="festival-layout">
+            <!-- 북마크 버튼 -->
+            <button th:id="'bookmark-btn-' + ${board.boardId}" class="board-btn" aria-label="북마크">
+                    <span th:id="'bookmark-icon-' + ${board.boardId}" th:data-bookmarked="${board.bookmark}">
+                        <!-- 초기 북마크 상태는 서버에서 설정 -->
+                        <img id="heart"
+                             th:src="@{${board.bookmark} ? 'images/board/redHeart.png' : 'images/board/emptyHeart.png'}">
+                    </span>
+            </button>
+            <!-- 주소 복사 버튼 -->
+            <button id="copyLink" onclick="copyLink()">
+                <img th:src="@{/images/board/link.png}" alt="링크" id="linkImage">
+            </button>
+            <!-- 길찾기 버튼 -->
+            <button id="openRouteMap" onclick="openKakaoMap()">
+                <img th:src="@{/images/board/route.png}" alt="링크" id="routeImage">
+            </button>
+        </div>
+    </div>
+    <div class="allPage">
+        <!-- 상세 페이지 -->
+        <div th:utext="${fastApiResponse}" class="detailPage"></div>
+        <!-- 지도 -->
+        <div class="festival-container">
+            <div class="festival-layout">
+                <div id="detail-map"></div>
+                <hr class="festival-underline">
+                <p class="restaurant-title">축제와 같이 즐기기 좋은 로컬 식당</p>
+                <div id="detail-restaurant"></div>
+                <hr class="festival-underline">
+            </div>
+        </div>
+        <!-- 댓글 -->
+        <div th:replace="~{festival/review}" class="reviewPage"></div>
+    </div>
+
+</div>
+</body>
+
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f8f287b27f4db60e289eee8e7669a880&libraries=services,clusterer"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        // 북마크 버튼 클릭 이벤트
+        $(document).on("click", ".board-btn", function () {
+            // 버튼 ID에서 boardId 추출
+            const boardId = $(this).attr("id").split("-")[2]; // 'bookmark-btn-{boardId}' 형태에서 ID 추출
+            const $bookmarkIcon = $(`#bookmark-icon-${boardId}`); // 해당 boardId의 북마크 아이콘
+            const $heartImage = $(`#bookmark-icon-${boardId} #heart`); // 해당 boardId의 북마크 하트 이미지
+
+
+            // AJAX 요청으로 북마크 상태 변경
+            $.ajax({
+                type: "GET", // GET 요청
+                url: `${location.origin}/api/map/${boardId}/bookmark`, // 동적 URL 생성
+                success: function (response) {
+
+                    // 북마크 상태에 따라 아이콘 업데이트
+                    if (response.isBookmarked) {
+                        $heartImage.attr('src', '/images/board/redHeart.png');
+                    } else {
+                        $heartImage.attr('src', '/images/board/emptyHeart.png');
+                    }
+                },
+                error: function (error) {
+                    console.error("Error occurred while bookmarking:", error);
+                    alert("북마크 상태 변경에 실패했습니다.");
+                }
+            });
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 모든 북마크 아이콘을 초기화
+        document.querySelectorAll('[id^="bookmark-icon"]').forEach(icon => {
+            const isBookmarked = icon.getAttribute("data-bookmarked") === "true";
+            const img = icon.querySelector('#heart');
+            img.src = isBookmarked ? "/images/board/redHeart.png" : "/images/board/emptyHeart.png";
+        });
+
+        let location = [[${board.location}]]; // 해당 페이지의 축제 주소 가져오기
+        getAllInfo(location)
+            .then(allData => {
+                let randomRestaurants = getRandomPlaces(allData);
+                displayRestaurants(randomRestaurants);  // 음식점, 카페 정보 화면에 출력
+            });
+
+        // 지도 생성
+        initMap();
+    });
+
+    // 주소 복사하기
+    function copyLink() {
+        let currentUrl = window.location.href; // 상세 페이지 주소 저장
+
+        // Clipboard API를 사용하여 URL을 클립보드에 복사
+        navigator.clipboard.writeText(currentUrl).then(function () { // 복사가 성공한 경우
+            alert("주소가 클립보드에 복사되었습니다");
+        }).catch(function (error) { // 복사 실패 시
+            console.error("복사 실패:", error);
+        });
+    }
+
+    // 길찾기
+    function openKakaoMap() {
+        // 도착지 위도, 경도
+        const destinationLatitude = [[${board.latitude}]];
+        const destinationLongitude = [[${board.longitude}]];
+
+        // 도착지 이름
+        const destinationLocationName = [[${board.title}]];
+
+        // 카카오맵 길찾기 URL
+        const kakaoMapUrl = `https://map.kakao.com/link/to/${destinationLocationName},${destinationLatitude},${destinationLongitude}`;
+
+        // 카카오맵 URL로 이동 - 새로운 탭에서 열기
+        window.open(kakaoMapUrl);
+    }
+
+    // 지도 생성
+    function initMap() {
+        let mapContainer = document.getElementById('detail-map'); // 지도를 표시할 div
+        let position = new kakao.maps.LatLng([[${board.latitude}]], [[${board.longitude}]]); // 지도의 중심좌표
+
+        let mapOptions = { //지도를 생성할 때 필요한 기본 옵션
+            center: position, // 지도의 중심
+            draggable: false,
+            level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+
+        let map = new kakao.maps.Map(mapContainer, mapOptions); //지도 생성
+
+        // 마커 생성
+        let marker = new kakao.maps.Marker({
+            position: position
+        });
+        marker.setMap(map);
+
+        // 마커에 클릭이벤트 등록 - 길찾기
+        kakao.maps.event.addListener(marker, 'click', function() {
+            openKakaoMap();
+        });
+    }
+
+    // 주소를 이용하여 음식점 정보 가져오기
+    function getRestaurantInfo(location) {
+        // 카카오맵 API를 사용하여 해당 위치 주변의 음식점 검색
+        return fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${location}&category_group_code=FD6`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'KakaoAK aad418f0b61f348b123293d4ebd2e107'
+            }
+        })
+            .then(response => response.json()) // JSON으로 변환
+            .then(data => {
+                if(data.documents.length > 0) {
+                    return data.documents.map(item => ({
+                        placeName: item.place_name, // 음식점
+                        address: item.address_name, // 음식점 주소
+                        category: item.category_name, // 음식점 카테고리
+                        url: item.place_url // 음식점 URL
+                    }));
+                } else {
+                    console.log('음식점 정보가 없습니다.');
+                    return [];
+                }
+            })
+            .catch(error => {
+                console.error('API 요청 오류:', error);
+                return [];
+            });
+    }
+
+    // 주소를 이용하여 카페 정보 가져오기
+    function getCafeInfo(location) {
+        // 카카오맵 API를 사용하여 해당 위치 주변의 카페 검색
+        return fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${location}&category_group_code=CE7`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'KakaoAK aad418f0b61f348b123293d4ebd2e107'
+            }
+        })
+            .then(response => response.json()) // JSON으로 변환
+            .then(data => {
+                if(data.documents.length > 0) {
+                    return data.documents.filter(item => {
+                        let categoryArray = item.category_name.split(' > ');
+                        return categoryArray[0] === '음식점'; // 첫 번째 항목이 '음식점'인 경우만
+                    }).map(item => ({
+                        placeName: item.place_name, // 카페
+                        address: item.address_name, // 카페 주소
+                        category: item.category_name, // 카페 카테고리
+                        url: item.place_url // 카페 URL
+                    }));
+                } else {
+                    console.log('카페 정보가 없습니다.');
+                    return [];
+                }
+            })
+            .catch(error => {
+                console.error('API 요청 오류:', error);
+                return [];
+            });
+    }
+
+    // 음식점과 카페의 정보 합치기
+    function getAllInfo(location) {
+        return Promise.all([getRestaurantInfo(location), getCafeInfo(location)])
+            .then(([restaurants, cafes]) => {
+                return [...restaurants, ...cafes]; // 두 배열을 합침
+            })
+            .catch(error => console.error('API 요청 오류:', error));
+    }
+
+    // 식당 카테고리에서 두 번째 항목 추출
+    function getCategoryName(categoryString) {
+        let categoryArray = categoryString.split(' > ');
+        return categoryArray.length > 1 ? categoryArray[1] : categoryArray[0];
+    }
+
+    // 식당 랜덤으로 3개 반환
+    function getRandomPlaces(arr) {
+        let shuffled = arr.slice(); // 원본을 변경하지 않기 위해 배열 복사
+        let randomPlaces= [];
+
+        for(let i=shuffled.length-1; i>=0; i--) { // Fisher-Yates 알고리즘
+            let randomIndex = Math.floor(Math.random() * (i + 1)); // 랜덤 인덱스
+            [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
+        }
+        return shuffled.slice(0, 3); // 식당 3개 반환
+    }
+
+    // 식당 출력
+    function displayRestaurants(restaurants) {
+        let restaurantContainer = document.getElementById("detail-restaurant");
+        restaurantContainer.innerHTML = ""; // 초기화
+
+        restaurants.forEach(restaurant => {
+            let restaurantDiv = document.createElement("div");
+            restaurantDiv.classList.add("restaurant-item");
+
+            const categoryImage = document.createElement("img"); // 식당 아이콘
+
+            let category = getCategoryName(restaurant.category); // 식당의 두번째 카테고리 가져오기
+            // 카테고리별 이미지를 다르게 설정
+            switch (category) {
+                case '한식':
+                case '분식':
+                    categoryImage.src = '/images/board/koreanFood.png';
+                    break;
+                case '중식':
+                    categoryImage.src = '/images/board/중식.png';
+                    break;
+                case '양식':
+                    categoryImage.src = '/images/board/양식.png';
+                    break;
+                case '일식':
+                    categoryImage.src = '/images/board/일식.png';
+                    break;
+                case '패스트푸드':
+                case '치킨':
+                    categoryImage.src = '/images/board/패스트푸드.png';
+                    break;
+                case '카페':
+                case '다저트':
+                case '간식':
+                    categoryImage.src = '/images/board/디저트.png';
+                    break;
+                default:
+                    categoryImage.src = '/images/board/기타.png';
+            }
+            categoryImage.alt = category;
+            categoryImage.classList.add("category-image");
+
+            let placeName = document.createElement("h3"); // 식당 이름
+            placeName.textContent = restaurant.placeName;
+
+            let address = document.createElement("p"); // 식당 주소
+            address.textContent = `${restaurant.address}`;
+
+            // restaurantDiv를 클릭하면 해당 URL로 이동하도록 이벤트 리스너 추가
+            restaurantDiv.addEventListener('click', function() {
+                window.open(restaurant.url, '_blank'); // 새로운 탭에서 링크 열기
+            });
+
+            restaurantDiv.appendChild(categoryImage);
+            restaurantDiv.appendChild(placeName);
+            restaurantDiv.appendChild(address);
+
+            restaurantContainer.appendChild(restaurantDiv);
+        });
+    }
+
+    sessionStorage.setItem('checkURL', window.location.href); // 상세 페이지 세션 스토리지 저장
+</script>
+</html>

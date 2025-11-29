@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block
+        th:replace="~{/layout/basic::setContent(~{this::content},~{this::title})}"
+>
+    <title th:fragment="title">내정보 관리</title>
+    <th:block th:fragment="content">
+        <style>
+            /* 전체 배경 및 텍스트 */
+            @font-face {
+              font-family: "S-CoreDream-3Light";
+              src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+                format("woff");
+              font-weight: normal;
+              font-style: normal;
+            }
+            body {
+              font-family: "S-CoreDream-3Light";
+              margin: 0;
+              padding: 0;
+              background-color: #ffffff;
+            }
+            .myInfo-container {
+              max-width: 800px;
+              margin: 20px auto;
+              padding: 20px;
+              background: #f7f8ff;
+              border-radius: 10px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            h2 {
+              text-align: center;
+              font-weight: 900;
+              color: #09214e;
+              margin-bottom: 20px;
+            }
+            .user-info {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              padding: 20px;
+              background: #fff;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              margin-bottom: 20px;
+            }
+            .user-info p {
+              font-size: 17px;
+              margin: 7.5px 0;
+              color: #555;
+            }
+            .user-info p strong {
+              color: #333;
+              display: inline-block;
+              width: 100px;
+              white-space: nowrap;
+            }
+            .user-info .myName {
+              font-size: 28px;
+              font-weight: 600;
+              margin: 10px 0;
+            }
+            .button-container {
+              text-align: center;
+              margin-top: 20px;
+            }
+            .button {
+              display: inline-block;
+              padding: 10px 20px;
+              font-size: 14px;
+              font-weight: bold;
+              color: #f7f8ff;
+              background-color: #6b8bf5;
+              border: none;
+              border-radius: 5px;
+              text-decoration: none;
+              cursor: pointer;
+              transition: background-color 0.3s;
+            }
+            /* 버튼 간 간격 주기 */
+            .button-container a.button + a.button {
+              margin-left: 10px; /* 버튼 간 간격 */
+            }
+            .button:hover {
+              background-color: #09214e;
+            }
+        </style>
+
+        <body>
+        <div class="myInfo-container">
+            <h2>내 정보 관리</h2>
+            <div class="user-info">
+                <p class="myName">
+                    <span th:text="${myInfo.name} + '님'">이름</span>
+                </p>
+                <p>
+                    <strong>이메일</strong>
+                    <span th:text="${myInfo.email}">hong@example.com</span>
+                </p>
+                <p>
+                    <strong>소셜로그인</strong>
+                    <span th:text="${myInfo.provider}">Google</span>
+                </p>
+                <p>
+<!--                    <strong>전화번호</strong>-->
+<!--                    <span th:text="${myInfo.phoneNumber}">010-0000-0000</span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                    <strong>생년월일</strong>-->
+<!--                    <span th:text="${myInfo.birthDate}">0000/00/00</span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                    <strong>MBTI</strong>-->
+<!--                    <span th:text="${myInfo.mbti}">INTP</span>-->
+<!--                </p>-->
+            </div>
+            <div class="button-container">
+                <a th:href="@{/festival/myPage/addtionalInfo.html}" class="button">추가 정보</a>
+                <a th:href="@{/festival/myPage/changePassword}" class="button">비밀번호 변경</a>
+            </div>
+        </div>
+        </body>
+    </th:block>
+</th:block>
+</html>

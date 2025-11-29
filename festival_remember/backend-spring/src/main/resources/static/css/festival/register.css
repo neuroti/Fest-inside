@@ -1,0 +1,150 @@
+:root {
+    --background-color: #f6f6ee; /* 아이보리 */
+    --text-color: #65645f; /* 텍스트 기본 색상 */
+    --accent-color: #6B8BF5; /* 하늘색 */
+    --input-border: #ccc; /* 입력 필드 테두리 색상 */
+    --hover-color: #adbced; /* 호버 배경 색상 */
+}
+
+/* 전체 페이지 스타일 */
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    font-family: 'S-CoreDream-3Light', sans-serif;
+}
+
+/* 회원가입 컨테이너 */
+.signup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--background-color);
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    /*box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
+}
+
+/* 제목 스타일 */
+.signup-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+/* 입력 그룹 */
+.signup-input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* 입력 필드 공통 스타일 */
+.signup-input-group input,
+.signup-input-group select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid var(--input-border);
+    border-radius: 30px; /* 둥근 모서리 */
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+}
+
+/* 포커스 시 효과 */
+.signup-input-group input:focus,
+.signup-input-group select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+/* 드롭다운 스타일 */
+.signup-input-group select {
+    appearance: none;
+    background: url('https://img.icons8.com/ios-glyphs/20/000000/chevron-down.png') no-repeat right 10px center;
+    background-size: 14px;
+    padding-right: 35px;
+    color: var(--text-color);
+}
+
+/* 버튼 스타일 */
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+.signup-button:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.02);
+}
+
+.signup-button:active {
+    transform: scale(1);
+}
+/* required 클래스가 있는 경우 추가 스타일링 */
+.signup-input-group.required input {
+    border: 2px solid #65645f; /* 강조된 테두리 색상 */
+    background-color: #fdfdfd; /* 약간 밝은 배경 */
+    position: relative;
+}
+
+.signup-input-group.required input:focus {
+    border-color: #65645f; /* 포커스 시 더 진한 색상 */
+}
+
+/* required 라벨 강조 */
+.signup-input-group.required::after {
+    content: '*'; /* 필수 항목 표시 */
+    color: red;
+    font-size: 14px;
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -5px; /* 라벨과 수직 정렬 */
+    vertical-align: middle;
+}
+
+/* 추가적으로 input에 마진 조정 */
+.signup-input-group.required {
+    margin-bottom: 20px; /* 필수 항목 간격 추가 */
+}
+
+/* 생년월일 입력 필드 스타일 */
+.signup-input-group #birthDate {
+    color: #65645f; /* 텍스트 색상 */
+    border: 1px solid var(--input-border); /* 기존 테두리 색상 유지 */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 30px; /* 양쪽 둥근 모서리 */
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    background-color: #fff; /* 입력 필드 배경 */
+}
+
+/* 생년월일 포커스 시 스타일 */
+.signup-input-group #birthDate:focus {
+    border-color: var(--accent-color); /* 포커스 시 테두리 색상 */
+    outline: none; /* 기본 포커스 효과 제거 */
+}
+/* 필수 입력 메시지 스타일 */
+.required-message {
+    font-size: 12px; /* 작고 눈에 거슬리지 않는 크기 */
+    color: red; /* 은은한 텍스트 색상 */
+    margin-top: 5px; /* 위 요소와 약간의 간격 */
+    text-align: left; /* 좌측 정렬 */
+    font-family: 'S-CoreDream-3Light', sans-serif; /* 일관된 폰트 */
+}

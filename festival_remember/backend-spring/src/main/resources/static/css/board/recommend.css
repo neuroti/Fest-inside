@@ -1,0 +1,285 @@
+:root {
+    --background-color: #09214e; /* 네이비 */
+    --text-color: #f7f8ff; /* 흰색 가까운 하늘 */
+    --accent-color: #6b8bf5; /* 하늘색 */
+    --other-color: #f1f1e6; /* 오트밀 */
+}
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'S-CoreDream-3Light';
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fb;
+    color: #333;
+}
+
+/* Container 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 추천 제목 */
+.recommend-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #09214e;
+    text-align: center;
+}
+
+/* 추천 슬라이드 영역 */
+.recommend-carousel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.recommend-list-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+/* 추천 슬라이드 영역 */
+.recommend-list {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card {
+    width: 280px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 350px; /* 이미지를 조금 더 길게 늘림 (기존: 300px -> 수정: 350px) */
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-content {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 0 0 10px 10px;
+}
+
+/* 제목과 위치의 간격 조정 */
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #09214e;
+    margin-bottom: 8px; /* 간격을 좀 더 여유있게 조정 (기존: 10px -> 수정: 12px) */
+}
+
+.card-location {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px; /* 위치 정보와 간격을 더 넓힘 (기존: 8px -> 수정: 15px) */
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
+    border: 2px solid #09214e;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.arrow svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: #09214e;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.arrow:hover {
+    background-color: transparent;
+    border: 2px solid #6b8bf5;
+}
+.arrow svg:hover {
+    stroke: #6b8bf5;
+}
+
+.arrow-left {
+    left: 10px;
+}
+
+.arrow-right {
+    right: 10px;
+}
+
+.arrow.hidden {
+    display: none;
+}
+
+/* MBTI Tabs */
+.mbti-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.mbti-pill {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    height: 200px;
+    background-color: var(--other-color);
+    border: 2px solid #ddd;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.mbti-pill:hover {
+    background-color: #f0f1f5;
+}
+
+.mbti-tab-button {
+    width: 100%;
+    height: 50%;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #333;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 50px;
+}
+
+.mbti-tab-button.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.mbti-tab-button:hover {
+    background-color: #5574d9;
+    color: white;
+}
+
+.mbti-recommend-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.mbti-section {
+    display: none;
+    width: 100%;
+}
+
+.recommend-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    width: 100%;
+}
+
+.recommend-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.recommend-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-thumbnail {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #09214e;
+    margin-bottom: 10px;
+}
+
+.card-location,
+.card-period,
+.card-contact {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media screen and (max-width: 768px) {
+    .recommend-cards {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .recommend-cards {
+        grid-template-columns: 1fr;
+    }
+}
