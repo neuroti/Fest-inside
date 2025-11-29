@@ -13,71 +13,41 @@
 
 ## 📂 프로젝트 구조
 Fest-inside/
-├── backend-spring/                         # ☕ Main API Server
+├── backend-spring/ # ☕ Main API Server
 │ ├── src/
 │ │ ├── main/
 │ │ │ ├── java/
 │ │ │ │ └── greenart/festival/
-│ │ │ │ ├── FestivalApplication.java        # Main Entry Point
-│ │ │ │ ├── controller/                     # HTTP 요청 처리
-│ │ │ │ │ ├── FestivalController.java
-│ │ │ │ │ ├── UserController.java
-│ │ │ │ │ └── BookmarkController.java
-│ │ │ │ ├── service/                        # 비즈니스 로직
-│ │ │ │ │ ├── FestivalService.java
-│ │ │ │ │ ├── UserService.java
-│ │ │ │ │ └── RecommendationService.java
-│ │ │ │ ├── repository/                     # 데이터 접근
-│ │ │ │ │ ├── FestivalRepository.java
-│ │ │ │ │ ├── UserRepository.java
-│ │ │ │ │ └── BookmarkRepository.java
-│ │ │ │ ├── entity/                         # JPA 엔티티
-│ │ │ │ │ ├── Festival.java
-│ │ │ │ │ ├── User.java
-│ │ │ │ │ └── Bookmark.java
-│ │ │ │ ├── dto/                            # 데이터 전송 객체
-│ │ │ │ │ ├── FestivalDto.java
-│ │ │ │ │ ├── UserDto.java
-│ │ │ │ │ └── BookmarkDto.java
-│ │ │ │ ├── config/                         # 설정
-│ │ │ │ │ ├── SecurityConfig.java
-│ │ │ │ │ └── WebConfig.java
-│ │ │ │ └── exception/                      # 예외 처리
-│ │ │ │ └── GlobalExceptionHandler.java
+│ │ │ │ ├── FestivalApplication.java
+│ │ │ │ ├── controller/ # HTTP 요청 처리
+│ │ │ │ ├── service/ # 비즈니스 로직
+│ │ │ │ ├── repository/ # 데이터 접근 (JPA)
+│ │ │ │ ├── entity/ # DB 엔티티
+│ │ │ │ ├── dto/ # 데이터 전송 객체
+│ │ │ │ ├── config/ # 설정
+│ │ │ │ └── exception/ # 예외 처리
 │ │ │ └── resources/
-│ │ │ ├── application.properties            # 메인 설정
-│ │ │ ├── templates/                        # Thymeleaf
-│ │ │ │ ├── index.html
-│ │ │ │ ├── festival-list.html
-│ │ │ │ └── user-profile.html
-│ │ │ ├── static/                           # 정적 리소스
-│ │ │ │ ├── css/
-│ │ │ │ │ ├── style.css
-│ │ │ │ │ └── bootstrap.css
-│ │ │ │ ├── js/
-│ │ │ │ │ ├── app.js
-│ │ │ │ │ └── search.js
-│ │ │ │ └── images/
-│ │ │ └── db/
-│ │ │ └── schema.sql
+│ │ │ ├── application.properties
+│ │ │ ├── templates/ # Thymeleaf 템플릿
+│ │ │ └── static/ # CSS, JS, Images
 │ │ └── test/
-│ │ └── java/greenart/festival/
-│ ├── build.gradle                          # Gradle 빌드 설정
-│ ├── settings.gradle                       # Gradle 모듈 설정
-│ ├── gradlew                               # Gradle Wrapper (Mac/Linux)
-│ └── gradlew.bat                           # Gradle Wrapper (Windows)
+│ ├── build.gradle
+│ └── settings.gradle
 │
-├── backend-fastapi/                        # 🐍 AI & Data Server
+├── backend-fastapi/ # 🐍 AI & Data Server
 │ ├── app/
-│ │ ├── kakaoAPI.py                         # 카카오 지도 API
-│ │ ├── KNN.py                              # 축제 추천 알고리즘 
-│ │ ├── main.py                             # FastAPI Entry Point, 웹 크롤링
-│ │ ├── MBTI.py                             # 축제 관련 API
-│ │ ├── recommendations.py                  # 추천 알고리즘 & 데이터베이스 연결
-│ │ └── oracleDB.py                         # 데이터베이스 연결 & 축제 데이터 삽입
-│ └── .env                                  # 환경 변수
+│ │ ├── main.py # FastAPI Entry Point
+│ │ ├── routers/ # API 라우트
+│ │ ├── models/ # DB 모델
+│ │ ├── schemas/ # Pydantic 스키마
+│ │ ├── services/ # 비즈니스 로직
+│ │ ├── core/ # 설정
+│ │ └── utils/ # 유틸리티
+│ ├── requirements.txt
+│ └── .env
 │
-└── README.md # 프로젝트 문서
+└── README.md
+
 ---
 
 ## 🛠 기술 스택
