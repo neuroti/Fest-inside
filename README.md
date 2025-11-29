@@ -12,42 +12,43 @@
 ---
 
 ## 📂 프로젝트 구조
-Fest-inside/
-├── backend-spring/ # ☕ Main API Server
-│ ├── src/
-│ │ ├── main/
-│ │ │ ├── java/
-│ │ │ │ └── greenart/festival/
-│ │ │ │ ├── FestivalApplication.java
-│ │ │ │ ├── controller/ # HTTP 요청 처리
-│ │ │ │ ├── service/ # 비즈니스 로직
-│ │ │ │ ├── repository/ # 데이터 접근 (JPA)
-│ │ │ │ ├── entity/ # DB 엔티티
-│ │ │ │ ├── dto/ # 데이터 전송 객체
-│ │ │ │ ├── config/ # 설정
-│ │ │ │ └── exception/ # 예외 처리
-│ │ │ └── resources/
-│ │ │ ├── application.properties
-│ │ │ ├── templates/ # Thymeleaf 템플릿
-│ │ │ └── static/ # CSS, JS, Images
-│ │ └── test/
-│ ├── build.gradle
-│ └── settings.gradle
-│
-├── backend-fastapi/ # 🐍 AI & Data Server
-│ ├── app/
-│ │ ├── main.py # FastAPI Entry Point
-│ │ ├── routers/ # API 라우트
-│ │ ├── models/ # DB 모델
-│ │ ├── schemas/ # Pydantic 스키마
-│ │ ├── services/ # 비즈니스 로직
-│ │ ├── core/ # 설정
-│ │ └── utils/ # 유틸리티
-│ ├── requirements.txt
-│ └── .env
-│
-└── README.md
 
+    Fest-inside/
+    ├── backend-spring/                    # ☕ Main API Server
+    │   ├── src/
+    │   │   ├── main/
+    │   │   │   ├── java/
+    │   │   │   │   └── greenart/festival/
+    │   │   │   │       ├── FestivalApplication.java
+    │   │   │   │       ├── controller/              # HTTP 요청 처리
+    │   │   │   │       ├── service/                 # 비즈니스 로직
+    │   │   │   │       ├── repository/              # 데이터 접근 (JPA)
+    │   │   │   │       ├── entity/                  # DB 엔티티
+    │   │   │   │       ├── dto/                     # 데이터 전송 객체
+    │   │   │   │       ├── config/                  # 설정
+    │   │   │   │       └── exception/               # 예외 처리
+    │   │   │   └── resources/
+    │   │   │       ├── application.properties
+    │   │   │       ├── templates/                   # Thymeleaf 템플릿
+    │   │   │       └── static/                      # CSS, JS, Images
+    │   │   └── test/
+    │   ├── build.gradle
+    │   └── settings.gradle
+    │
+    ├── backend-fastapi/                   # 🐍 AI & Data Server
+    │   ├── app/
+    │   │   ├── main.py                    # FastAPI Entry Point
+    │   │   ├── routers/                   # API 라우트
+    │   │   ├── models/                    # DB 모델
+    │   │   ├── schemas/                   # Pydantic 스키마
+    │   │   ├── services/                  # 비즈니스 로직
+    │   │   ├── core/                      # 설정
+    │   │   └── utils/                     # 유틸리티
+    │   ├── requirements.txt
+    │   └── .env
+    │
+    └── README.md
+    
 ---
 
 ## 🛠 기술 스택
