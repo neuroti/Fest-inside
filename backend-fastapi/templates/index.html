@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festivals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%; /* 화면 전체 높이 설정 */
+            margin: 0; /* 기본 여백 제거 */
+            padding: 0; /* 기본 패딩 제거 */
+        }
+
+        /* 축제 정보를 담은 컨테이너 */
+        .festival-container {
+            position: relative;
+            height: auto; /* 높이는 내용에 맞추어서 자동 설정 */
+            width: 100%;
+            display: flex;
+            justify-content: center; /* 가로로 중앙 정렬 */
+            align-items: center; /* 세로로 중앙 정렬 */
+            padding: 20px;
+        }
+
+        /* 축제 정보의 레이아웃 */
+        .festival-layout {
+            width: 100%;
+            max-width: 800px; /* 최대 너비를  800px로 제한 */
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            flex-direction: column; /* 세로 방향으로 배치 */
+        }
+
+        /* 제목 스타일 */
+        .festival-title {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* 기간 스타일 */
+        .festival-date {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* 디데이 스타일 */
+        .d-day {
+            color: white;
+            font-size: 1rem;
+            font-weight: bold; /* 폰트 굵게 */
+            background-color: #6563FF;
+            padding: 5px; /* 디데이 주변에 여백 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            margin-right: 5px;
+        }
+
+        /* 이미지 스타일 */
+        .festival-image {
+            width: 100%;
+            height: auto;
+            max-width: 100%; /* 최대 너비 100%로 설정 */
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        /* 상세 설명 스타일 */
+        .festival-description {
+            width: 100%; /* 부모 컨테이너 폭에 맞춤 */
+            max-width: 800px; /* 최대 너비 800px */
+            text-align: left; /* 설명을 왼쪽 정렬 */
+            font-size: 1.05rem;
+            line-height: 1.5; /* 줄 간격 설정 */
+            margin-bottom: 10px;
+            display: -webkit-box; /* 텍스트가 3줄로 제한되도록 설정 */
+            -webkit-line-clamp: 3; /* 최대 3줄 */
+            -webkit-box-orient: vertical; /* 세로로 배치 */
+            overflow: hidden; /* 넘치는 텍스트 숨기기 */
+            height: auto;
+        }
+
+        /* "더보기" 버튼 스타일 */
+        .show-more {
+            color: #555555;
+            cursor: pointer; /* 마우스 커서가 포인터로 변화 */
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: right; /* 버튼을 오른쪽 정렬 */
+            display: block; /* 블록 요소로 변경 */
+            margin-top: 10px;
+        }
+
+        /* 텍스트 확장 상태 */
+        .expanded {
+            -webkit-line-clamp: unset; /* 3줄 제한 해제 */
+        }
+
+        /* 축제 기간, 장소, 문의 스타일 */
+        .festival-details-container {
+            width: 100%; /* 부모 컨테이너 폭에 맞춤 */
+            max-width: 800px; /* 최대 너비 800px */
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* 밑줄 스타일 */
+        .festival-underline {
+            width: 100%; /* 사진의 가로 길이에 맞추어 밑줄 크기 설정 */
+            border: 0; /* 기본 경계선 제거 */
+            border-top: 2px solid #000; /* 두꺼운 검은색 밑줄 */
+            margin: 50px 0 50px 0; /* 밑줄과 내용 간격 설정 */
+        }
+
+        /* 축제 기간, 장소, 문의 텍스트 스타일 */
+        .festival-details-container p {
+            display: flex; /* 이미지와 텍스트를 가로로 나란히 배치 */
+            align-items: center; /* 이미지와 텍스트를 수직 중앙 정렬 */
+            margin: 0;
+        }
+
+        /* p 태그 간의 간격을 조정하고 싶다면 margin 값을 조정 */
+        .festival-details-container p:not(:last-child) {
+            margin-bottom: 15px; /* 각 p 태그 간의 하단 간격을 15px로 설정 */
+        }
+
+        /* 축제 기간, 장소, 문의 아이콘 크기 설정 */
+        #dateImage, #locationImage, #phoneImage {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px; /* 아이콘과 텍스트 간격 설정 */
+        }
+
+        /* 반응형 디자인: 화면 크기가 768px 이하일 때 */
+        @media (max-width: 768px) {
+            .festival-title { /* 제목 */
+                font-size: 1.5rem;
+            }
+
+            .festival-description { /* 설명 */
+                font-size: 1rem;
+            }
+
+            .festival-date { /* 기간 */
+                font-size: 0.9rem;
+            }
+
+            .festival-details-container { /* 더 자세한 정보 */
+                font-size: 0.9rem;
+            }
+
+            .show-more { /* 더보기 버튼 정보 */
+                font-size: 0.8rem;
+            }
+
+            .festival-image { /* 이미지 */
+                max-width: 100%;
+            }
+        }
+
+        /* 반응형 디자인: 화면 크기가 576px 이하일 때 */
+        @media (max-width: 576px) {
+            .festival-title { /* 제목 */
+                font-size: 1.25rem;
+            }
+
+            .festival-description { /* 설명 */
+                font-size: 0.95rem;
+            }
+
+            .festival-date { /* 기간 */
+                font-size: 0.85rem;
+            }
+
+            .festival-details-container { /* 더 자세한 정보 */
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+{% if festivals %}
+{% for festival in festivals %}
+<div class="festival-container">
+    <div class="festival-layout">
+        <!-- 축제 제목 -->
+        <h1 class="festival-title">{{ festival.제목 }}</h1>
+        <!-- 축제 기간, 디데이 -->
+        <p class="festival-date">
+            {% if festival['세부 내용']['디데이'] %}
+            <span class="d-day">{{ festival['세부 내용']['디데이'] }}</span>
+            {% endif %}
+            {{ festival['세부 내용']['기간'] }}
+        </p>
+        <!-- 축제 이미지 -->
+        <div class="festival-image">
+            {% if festival.이미지 %}
+            <img src="{{ festival.이미지 }}" class="img-fluid festival-image" alt="{{ festival.제목 }}">
+            {% endif %}
+        </div>
+        <!-- 상세 설명 -->
+        <p class="festival-description" id="textContainer">{{ festival.내용 }}</p>
+        <span class="show-more" id="showMoreBtn">더보기</span>
+        <!-- 밑줄 -->
+        <hr class="festival-underline">
+        <!-- 기간, 장소, 문의 -->
+        <div class="festival-details-container">
+            <p><img src="http://localhost:8000/static/images/date.png" alt="기간" id="dateImage">
+                {{ festival['세부 내용']['기간'] }}
+            </p>
+            <p><img src="http://localhost:8000/static/images/location.png" alt="장소" id="locationImage">
+                {{ festival['세부 내용']['장소'] }}
+            </p>
+            <p><img src="http://localhost:8000/static/images/phone.png" alt="문의" id="phoneImage">
+                {{ festival['세부 내용']['문의'] }}
+            </p>
+        </div>
+        <!-- 밑줄 -->
+        <hr class="festival-underline">
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="col-12">
+    <p class="text-center text-muted">No festivals found for the given search criteria.</p>
+</div>
+{% endif %}
+
+<script>
+    // 텍스트 길이를 확인하고 더보기 버튼을 숨길지 결정
+    window.addEventListener('DOMContentLoaded', function () {
+        let textContainer = document.getElementById('textContainer');
+        let showMoreBtn = document.getElementById('showMoreBtn');
+
+        // 텍스트 높이 확인하기
+        if (textContainer.scrollHeight <= textContainer.clientHeight) {
+            showMoreBtn.style.display = 'none';  // 3줄 이하일 경우 버튼 숨김
+        } else {
+            showMoreBtn.style.display = 'block'; // 3줄 초과일 경우 버튼 보임
+        }
+    });
+
+    // 더보기 버튼 클릭 시 텍스트 확장, 축소
+    document.getElementById('showMoreBtn').addEventListener('click', function () {
+        let textContainer = document.getElementById('textContainer');
+        let button = document.getElementById('showMoreBtn');
+
+        // 텍스트가 확장되어 있는지 확인
+        let isExpanded = textContainer.classList.contains('expanded');
+
+        if (isExpanded) {
+            // 접기 상태로 변경
+            textContainer.classList.remove('expanded');
+            button.textContent = '더보기';
+        } else {
+            // 더보기 상태로 변경
+            textContainer.classList.add('expanded');
+            button.textContent = '접기';
+        }
+    });
+</script>
+</body>
