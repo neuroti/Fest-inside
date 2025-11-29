@@ -1,4 +1,4 @@
-package festival_remember.backend-spring.src.main.java.greenart.festival;
+package greenart.festival;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
